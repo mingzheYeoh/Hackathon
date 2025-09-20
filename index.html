@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart AI Content Localizer - Malaysia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            padding: 40px;
+        }
+        
+        .input-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px dashed #dee2e6;
+            transition: all 0.3s ease;
+        }
+        
+        .input-section:hover {
+            border-color: #007bff;
+            transform: translateY(-2px);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            transition: border-color 0.3s ease;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        .localize-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .localize-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(40,167,69,0.4);
+        }
+        
+        .localize-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .result-section {
+            margin-top: 30px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+            color: #6c757d;
+        }
+        
+        .loading::before {
+            content: "🤖";
+            display: block;
+            font-size: 48px;
+            margin-bottom: 15px;
+            animation: bounce 1s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #007bff;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-card h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .localized-content {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            border: 2px solid #e1bee7;
+        }
+        
+        .hashtags {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 16px;
+            color: #007bff;
+            border: 1px solid #dee2e6;
+        }
+        
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .info-list li {
+            background: #f8f9fa;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border-left: 3px solid #28a745;
+            transition: all 0.3s ease;
+        }
+        
+        .info-list li:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .error-card {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-left: 5px solid #dc3545;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 10px;
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .demo-buttons {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .demo-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            margin: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+        
+        .demo-btn:hover {
+            background: #5a6268;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .main-content { padding: 20px; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇲🇾 Smart AI Content Localizer</h1>
+            <p>Culturally adapt your marketing content for Malaysia with AI</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="input-section">
+                <div class="form-group">
+                    <label for="inputText">📝 Enter your marketing content:</label>
+                    <textarea id="inputText" placeholder="Enter your original marketing content here (English)...">Flash Sale! 70% OFF everything! Don't miss out on this incredible deal that will change your life forever!</textarea>
+                </div>
+                
+                <div class="demo-buttons">
+                    <button class="demo-btn" onclick="loadDemo('sale')">💸 Sale Demo</button>
+                    <button class="demo-btn" onclick="loadDemo('product')">📱 Product Demo</button>
+                    <button class="demo-btn" onclick="loadDemo('service')">🏢 Service Demo</button>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="platform">📱 Social Media Platform:</label>
+                        <select id="platform">
+                            <option value="facebook">Facebook</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="tiktok">TikTok</option>
+                            <option value="linkedin">LinkedIn</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="audience">👥 Target Audience:</label>
+                        <select id="audience">
+                            <option value="young_adults">Young Adults (18-30)</option>
+                            <option value="families">Families</option>
+                            <option value="professionals">Professionals</option>
+                            <option value="general">General Public</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="language">🗣️ Output Language:</label>
+                        <select id="language">
+                            <option value="english">Malaysian English</option>
+                            <option value="malay">Bahasa Malaysia</option>
+                            <option value="multilingual">Mixed (Rojak Style)</option>
+                            <option value="chinese">Chinese (Simplified)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button class="localize-btn" onclick="localizeContent()">
+                    🚀 Localize Content with AI
+                </button>
+            </div>
+            
+            <div id="result" class="result-section"></div>
+        </div>
+    </div>
+
+    <script>
+        // Demo content loader
+        function loadDemo(type) {
+            const demos = {
+                sale: "Flash Sale! 70% OFF everything! Don't miss out on this incredible deal that will change your life forever!",
+                product: "Introducing our revolutionary smartphone with amazing features that will blow your mind! Perfect for everyone!",
+                service: "Our premium consulting services deliver exceptional results. Join thousands of satisfied clients worldwide!"
+            };
+            document.getElementById('inputText').value = demos[type] || demos.sale;
+        }
+
+        async function localizeContent() {
+            const resultDiv = document.getElementById('result');
+            const button = document.querySelector('.localize-btn');
+            
+            // Show loading state
+            button.disabled = true;
+            button.innerHTML = '⏳ Processing...';
+            resultDiv.innerHTML = '<div class="loading">AI is analyzing and localizing your content for Malaysian market...</div>';
+            
+            const data = {
+                text: document.getElementById('inputText').value,
+                target_culture: 'malaysian',
+                platform: document.getElementById('platform').value,
+                language: document.getElementById('language').value,
+                audience: document.getElementById('audience').value
+            };
+            
+            try {
+                const response = await fetch('https://lpeyouluyc.execute-api.ap-southeast-5.amazonaws.com/dev/localize', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.localization_result) {
+                    const loc = result.localization_result;
+                    resultDiv.innerHTML = `
+                        <div class="result-card">
+                            <h4>🎯 Localized Content</h4>
+                            <div class="localized-content">${loc.localized_content}</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>📱 Platform-Specific Hashtags</h4>
+                            <div class="hashtags">${loc.platform_specific_hashtags ? loc.platform_specific_hashtags.join(' ') : '#Malaysia'}</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>🔄 Cultural Adaptations Made</h4>
+                            <ul class="info-list">
+                                ${loc.cultural_adaptations ? loc.cultural_adaptations.map(item => `<li>${item}</li>`).join('') : '<li>Basic cultural adaptation applied</li>'}
+                            </ul>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>👥 Audience Targeting Notes</h4>
+                            <ul class="info-list">
+                                ${loc.audience_targeting_notes ? loc.audience_targeting_notes.map(item => `<li>${item}</li>`).join('') : '<li>General audience targeting applied</li>'}
+                            </ul>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>⏰ Best Timing Recommendations</h4>
+                            <p>${loc.timing_recommendations || 'Post during peak hours: 7-9 PM Malaysian time'}</p>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>🚀 Engagement Boosters</h4>
+                            <ul class="info-list">
+                                ${loc.engagement_boosters ? loc.engagement_boosters.map(item => `<li>${item}</li>`).join('') : '<li>Local cultural elements added</li>'}
+                            </ul>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<div class="error-card">❌ Error: ${result.error || 'Failed to process content'}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error-card">❌ Network Error: ${error.message}<br><small>Please check your internet connection and try again.</small></div>`;
+            } finally {
+                // Reset button
+                button.disabled = false;
+                button.innerHTML = '🚀 Localize Content with AI';
+            }
+        }
+
+        // Auto-resize textarea
+        document.getElementById('inputText').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    </script>
+</body>
+</html>
